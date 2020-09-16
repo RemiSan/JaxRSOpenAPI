@@ -1,5 +1,7 @@
 package fr.istic.taa.jaxrs.rest;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,10 +19,15 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class UserResource {
 
 	@GET
+	public List<User> getUsers(){
+		UserDao dao = new UserDao();
+		return dao.findAll();
+	}
+	
+	@GET
 	@Path("/{userId}")
 	public User getUserById(@PathParam("userId") Long id)  {
 		UserDao dao = new UserDao();
-		dao.findOne(id);
 		return dao.findOne(id);
 	}
 
