@@ -1,5 +1,7 @@
 package fr.istic.taa.jaxrs.rest;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,20 +18,26 @@ import io.swagger.v3.oas.annotations.Parameter;
 @Produces({"application/json", "application/xml"})
 public class FicheResource {
 
-  @GET
-  @Path("/{ficheId}")
-  public Fiche getFicheById(@PathParam("ficheId") Long id)  {
-	  FicheDao dao = new FicheDao();
-	  dao.findOne(id);
-      return new Fiche();
-  }
+	@GET
+	public List<Fiche> getFiches(){
+		FicheDao dao = new FicheDao();
+		return dao.findAll();
+	}
+	
+	@GET
+	@Path("/{ficheId}")
+	public Fiche getFicheById(@PathParam("ficheId") Long id)  {
+		FicheDao dao = new FicheDao();
+		dao.findOne(id);
+		return new Fiche();
+	}
 
-  @POST
-  @Consumes("application/json")
-  public Response addFiche(
-      @Parameter(description = "Fiche object that needs to be added to the store", required = true) Fiche fiche) {
-    FicheDao dao = new FicheDao();
-    dao.save(fiche);
-    return Response.ok().entity("SUCCESS").build();
-  }
+	@POST
+	@Consumes("application/json")
+	public Response addFiche(
+			@Parameter(description = "Fiche object that needs to be added to the store", required = true) Fiche fiche) {
+		FicheDao dao = new FicheDao();
+		dao.save(fiche);
+		return Response.ok().entity("SUCCESS").build();
+	}
 }
