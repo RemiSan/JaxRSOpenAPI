@@ -2,12 +2,7 @@ package fr.istic.taa.jaxrs.rest;
 
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import fr.istic.taa.jaxrs.dao.generic.FicheDao;
@@ -19,25 +14,32 @@ import io.swagger.v3.oas.annotations.Parameter;
 public class FicheResource {
 
 	@GET
-	public List<Fiche> getFiches(){
+	public Response getFiches(){
 		FicheDao dao = new FicheDao();
-		return dao.findAll();
+		return Response.ok(dao.findAll()).build();
 	}
-	
+
+	@POST
+	public Response addFiche(
+			@Parameter(description = "Fiche object that needs to be added to the store", required = true) Fiche fiche) {
+		FicheDao dao = new FicheDao();
+		dao.save(fiche);
+		return Response.ok().entity("SUCCESS").build();
+	}
+
+	@DELETE
+	@Path("/{ficheId}")
+	public Response deleteFiche(@PathParam("ficheId") Long id)  {
+		FicheDao dao = new FicheDao();
+		dao.deleteById(id);
+		return Response.ok().build();
+	}
+
 	@GET
 	@Path("/{ficheId}")
 	public Fiche getFicheById(@PathParam("ficheId") Long id)  {
 		FicheDao dao = new FicheDao();
 		dao.findOne(id);
 		return new Fiche();
-	}
-
-	@POST
-	@Consumes("application/json")
-	public Response addFiche(
-			@Parameter(description = "Fiche object that needs to be added to the store", required = true) Fiche fiche) {
-		FicheDao dao = new FicheDao();
-		dao.save(fiche);
-		return Response.ok().entity("SUCCESS").build();
 	}
 }

@@ -28,7 +28,7 @@ public class Fiche implements Serializable{
 	private String title;
 	
 	private User user;
-	
+
 	private int estimatedTime;
 	
 	private List<Tag> tags;
@@ -62,7 +62,6 @@ public class Fiche implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
 	
 	@ManyToOne
 	@XmlElement(name = "user")

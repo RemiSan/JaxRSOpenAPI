@@ -24,6 +24,7 @@ import javax.ws.rs.core.Application;
 import fr.istic.taa.jaxrs.rest.FicheResource;
 import fr.istic.taa.jaxrs.rest.UserResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 public class TestApplication extends Application {
 
@@ -35,9 +36,18 @@ public class TestApplication extends Application {
         clazzes.add(UserResource.class);
         clazzes.add(FicheResource.class);
         clazzes.add(OpenApiResource.class);
-        
 
         return clazzes;
+    }
+
+    @Override
+    public Set<Object> getSingletons() {
+        Set<Object> providers = new HashSet<>();
+        CorsFilter corsFilter = new CorsFilter();
+        corsFilter.getAllowedOrigins().add("*");
+        corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+        providers.add(corsFilter);
+        return providers;
     }
 
 }
